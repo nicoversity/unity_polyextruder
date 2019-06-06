@@ -1,6 +1,6 @@
 # Unity - PolyExtruder
 
-The purpose of this project is to provide the functionality to create custom meshes (polygons) in Unity3D based on a collection (array) of vertices at directly runtime. These 2D meshes are created along the x- and z-dimensions in the 3D space. Furthermore, the created custom mesh can be *extruded* (into a 3D prism) along the y-dimension in the 3D space.
+The purpose of this project is to provide the functionality to create custom meshes (polygons) in Unity3D based on a collection (array) of vertices directly at runtime. These 2D meshes are created along the x- and z-dimensions in the 3D space. Furthermore, the created custom mesh can be *extruded* (into a 3D prism) along the y-dimension in the 3D space.
 
 #### Background
 
@@ -76,6 +76,10 @@ polyExtruderGO.name = "MyCustomMeshName";
 
 // run poly extruder according to input data
 polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MyCustomMeshData, Color.grey, is3D);
+
+// access calculated area and centroid
+float area = polyExtruder.polygonArea;
+Vector2 centroid = polyExtruder.polygonCentroid;
 ```
 
 #### Further documentation
