@@ -15,11 +15,12 @@
  *      - bottom mesh: = Prism 2D
  *      - top mesh: same as bottom mesh but at an increased position along the y-dimension
  *      - surround mesh: connecting bottom and top mesh along their outline vertices
+ * - Outline Renderer = LineRenderer component based on the top most polygon, outlining the surface for better differentiation (for instance when placed next to other prisms
  *
  * ATTENTION: No holes-support in polygon extrusion (Prism 3D) implemented!
  * Although Triangulation.cs supports "holes" in the 2D polygon, the support of holes as part of the PolyExtruder *has not* been implemented in this version.
  * 
- * Supported Unity version: 2019.1.5f1 Personal (tested)
+ * Supported Unity version: 2019.2.17f1 Personal (tested)
  *
  * Author: Nico Reski
  * Web: https://reski.nicoversity.com
@@ -32,22 +33,30 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Class to create a (extruded) polygon based on a collection of vertices.
+/// </summary>
 public class PolyExtruder : MonoBehaviour
 {
     #region Properties
 
-    // reference to name of the prism
-    public string prismName;
+    [Header("Prism Configuration")]
+    public string prismName;                        // reference to name of the prism
+    public Color32 prismColor;                      // reference to prism color
+    public float polygonArea;                       // references to area of (top) polygon
+    public Vector2 polygonCentroid;                 // references to centroid of (top) polygon
 
-    // reference to prism color
-    public Color32 prismColor;
+    [Header("Outline Renderer Configuration")]
+    public bool isOutlineRendered = false;          // indicator if the outline should be rendered / displayed or not
+    public float outlineWidth = 0.01f;              // float representing the width of the outline
+    public Color outlineColor = Color.black;        // Color representing the color of the outline
 
-    // references to area and centroid of (top) polygon
-    public float polygonArea;
-    public Vector2 polygonCentroid;
 
-	// indicator if GameObject is extruded 3D (prism) or 2D (polygon)
-	private bool is3D;
+    // private properties
+    //
+
+    // indicator if GameObject is extruded 3D (prism) or 2D (polygon)
+    private bool is3D;
 
     // reference to extrusion height (Y axis)
     // Note: default y (height) of extruded polygon = 1.0f; default y (height) of bottom polygon = 0.0f;
@@ -418,6 +427,9 @@ public class PolyExtruder : MonoBehaviour
         // sync mesh information
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
+
+        // init outline (if required)
+        if (this.isOutlineRendered) initOutlineRenderer();
     }
 
     #endregion
@@ -456,6 +468,53 @@ public class PolyExtruder : MonoBehaviour
             topMeshRenderer.material.color = this.prismColor;
             surroundMeshRenderer.material.color = this.prismColor;
         }
+    }
+
+    #endregion
+
+
+    #region OUTLINE_RENDERER
+
+    /// <summary>
+    /// Method to initialize the display of an outline for the polygon / prism based on its initial configuration.
+    /// </summary>
+    /// <returns>True if the outline could be initialized, false if not.</returns>
+    public bool initOutlineRenderer()
+    {
+        // allow initialization only if no (other) LineRenderer component is already attached to the PolyExtruder's GameObject
+        if (this.gameObject.GetComponent<LineRenderer>() == true) return false;
+
+        // outline, practically implemented as LineRenderer component, is attached only to the surface polygon
+        // if 3D -> top mesh
+        // if 2D (not 3D) -> bottom mesh
+
+        // determine LineRenderer's position along the y-axis (in sync with the corresponding mesh position)
+        float yPos = DEFAULT_TOP_Y;
+        if (!this.is3D) yPos = DEFAULT_BOTTOM_Y;
+
+        // attach LineRenderer component
+        LineRenderer outlineRenderer = this.gameObject.AddComponent<LineRenderer>();
+
+        // initialize all LineRenderer component related properties
+        outlineRenderer.startWidth = outlineWidth;
+        outlineRenderer.endWidth = outlineWidth;
+        outlineRenderer.useWorldSpace = false;
+        outlineRenderer.material = new Material(Shader.Find("Standard"));
+        outlineRenderer.material.color = outlineColor;
+
+        // prepare original polygon vertices for LineRenderer positions
+        Vector3[] outlineRendererPositions = new Vector3[this.originalPolygonVertices.Length];
+        for (int i = 0; i < this.originalPolygonVertices.Length; i++)
+        {
+            outlineRendererPositions[i] = new Vector3(this.originalPolygonVertices[i].x, yPos, this.originalPolygonVertices[i].y);
+        }
+
+        // update LineRenderer's positions
+        outlineRenderer.positionCount = outlineRendererPositions.Length;
+        outlineRenderer.loop = true;
+        outlineRenderer.SetPositions(outlineRendererPositions);
+
+        return true;
     }
 
     #endregion

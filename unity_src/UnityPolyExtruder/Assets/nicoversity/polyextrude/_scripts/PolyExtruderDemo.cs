@@ -3,7 +3,7 @@
  *
  * Description: Class to demonstrate the application and functionalities of the PolyExtruder.cs script.
  * 
- * Supported Unity version: 2019.1.5f1 Personal (tested)
+ * Supported Unity version: 2019.2.17f1 Personal (tested)
  *
  * Author: Nico Reski
  * Web: https://reski.nicoversity.com
@@ -16,6 +16,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Class to demonstrate the PolyExtruder class' functionalities.
+/// </summary>
 public class PolyExtruderDemo : MonoBehaviour
 {
     // enum for selecting example data (to be selected via Unity Inspector)
@@ -23,6 +26,7 @@ public class PolyExtruderDemo : MonoBehaviour
     public ExampleData exampleData;
 
     // set up options (adjusted via Unity Inspector)
+    public bool isOutlineRendered = false;
     public bool is3D = false;
     public bool enableMovement = false;
     public float extrusionHeight = 10.0f;
@@ -38,6 +42,9 @@ public class PolyExtruderDemo : MonoBehaviour
 
         // add PolyExtruder script to newly created GameObject and keep track of its reference
         polyExtruder = polyExtruderGO.AddComponent<PolyExtruder>();
+
+        // global PolyExtruder configurations
+        polyExtruder.isOutlineRendered = isOutlineRendered;
 
         // run poly extruder according to selected example data
         switch (exampleData)

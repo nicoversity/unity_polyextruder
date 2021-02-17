@@ -7,7 +7,7 @@
  * Triangle.NET library implementation (by Christian Woltering): https://archive.codeplex.com/?p=triangle
  * (Original) Triangle library implementation (by Jonathan Richard Shewchuk): http://www.cs.cmu.edu/~quake/triangle.html
  * 
- * Supported Unity version: 2019.1.5f1 Personal (tested)
+ * Supported Unity version: 2019.2.17f1 Personal (tested)
  *
  * Author: Nico Reski
  * Web: https://reski.nicoversity.com
@@ -21,6 +21,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TriangleNet.Geometry;
 
+/// <summary>
+/// Class to triangulate (create render triangles for) a custom polygon mesh.
+/// </summary>
 public class Triangulation
 {
     #region TRIANGULATION

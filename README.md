@@ -22,6 +22,7 @@ Furthermore, the `PolyExtruder.cs` class provides some *quality-of-life* feature
 - calculation of the mesh's (2D polygon's) area
 - calculation of the mesh's (2D polygon's) centroid
 - set extrusion length ("height")
+- select whether or not to visually display the polygon's outline
 
 The main idea is to visualize the 2D input data along the x- and z-dimensions, while the (potential) extrusion is always conducted along the y-dimension. 
 
@@ -29,8 +30,8 @@ The main idea is to visualize the 2D input data along the x- and z-dimensions, w
 
 This project has been built using the following specifications:
 
-* OS X 10.14.5
-* [Unity3D](https://unity3d.com) 2019.1.5f1 Personal (OS X release)
+* OS X 10.14.6
+* [Unity3D](https://unity3d.com) 2019.2.17f1 Personal (OS X release)
 
 *Note:* Generally, Unity source code should work also within their Windows counterparts. Please check out the above stated dependencies for troubleshooting.
 
@@ -114,6 +115,9 @@ Following, some visual impressions of the included example data, visualized usin
 #### PolyExtruder: SCB Kommun RT90 Gotland 3D
 ![SCB Kommun RT90 Gotland 3D](docs/demo_SCB_Kommun_RT90_Gotland_3D.png)
 
+#### PolyExtruder: SCB Kommun RT90 Gotland 3D with outline
+![SCB Kommun RT90 Gotland 3D with outline](docs/demo_SCB_Kommun_RT90_Gotland_3D_outlined.png)
+
 #### PolyExtruder: SCB Kommun RT90 Gotland 3D (movement enabled)
 ![SCB Kommun RT90 Gotland 3D with movement enabled](docs/demo_SCB_Kommun_RT90_Gotland_3D_movementEnabled.gif)
 
@@ -139,6 +143,12 @@ A random extrusion length ("height") for each municipality has been applied to e
 #### PolyExtruder.cs
 
 1. No holes-support for extrusion (3D prism) is implemented. Although the `Triangulation.cs` script supports holes in the 2D polygon mesh, the support for holes as part of the `PolyExtruder.cs` class *has not* been implemented in this version.
- 
+
+## Changelog
+### 2021-02-17
+
+* added feature to allow display of the polygon's outline
+* upgrade to support Unity version 2019.2.17f1 Personal (from prior version 2019.1.5f1; no changes in the code required)
+
 ## License
 MIT License, see [LICENSE.md](LICENSE.md)
