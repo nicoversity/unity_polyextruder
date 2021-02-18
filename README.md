@@ -66,14 +66,19 @@ Vector2[] MyCustomMeshData = new Vector2[]
 float extrusionHeight = 10.0f;
 bool is3D = true;
 
-// create new GameObject (as a child)
+// create new GameObject (as a child), and further configuration
 GameObject polyExtruderGO = new GameObject();
 polyExtruderGO.transform.parent = this.transform;
+polyExtruderGO.name = "MyCustomMeshName";
 
 // add PolyExtruder script to newly created GameObject,
-// keep track of its reference, and name it
+// keep track of its reference
 PolyExtruder polyExtruder = polyExtruderGO.AddComponent<PolyExtruder>();
-polyExtruderGO.name = "MyCustomMeshName";
+
+// configure display of outline (before running the poly extruder)
+polyExtruder.isOutlineRendered = true;    // default: false
+polyExtruder.outlineWidth = 0.1f;         // default: 0.01f
+polyExtruder.outlineColor = Color.blue;   // default: Color.black
 
 // run poly extruder according to input data
 polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MyCustomMeshData, Color.grey, is3D);
