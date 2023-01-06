@@ -1,10 +1,10 @@
 # Unity - PolyExtruder
 
-The purpose of this project is to provide the functionality to create custom meshes (polygons) in Unity3D based on a collection (array) of vertices directly at runtime. These 2D meshes are created along the x- and z-dimensions in the 3D space. Furthermore, the created custom mesh can be *extruded* (into a 3D prism) along the y-dimension in the 3D space.
+The purpose of this project is to provide the functionality to create custom meshes (polygons) in Unity based on a collection (array) of vertices directly at runtime. These 2D meshes are created along the x- and z-dimensions in the 3D space. Furthermore, the created custom mesh can be *extruded* (into a 3D prism) along the y-dimension in the 3D space.
 
 #### Background
 
-Some of my research work required me to visualize country borders (geo-spatial coordinates; received from various open data sources) as individual meshes (2D polygons / 3D prisms) in the 3D space in Unity3D. Some examples of the usage of this project are provided beneath in the section **Screenshots - SCB Kommun RT90**, demonstrating the visualization of all individual municipalities in the country of Sweden.
+Some of my research work required me to visualize country borders (geospatial coordinates; received from various open data sources) as individual meshes (2D polygons / 3D prisms) in the 3D space in Unity. Some examples of the usage of this project are provided beneath in the section **Screenshots - SCB Kommun RT90**, demonstrating the visualization of all individual municipalities in the country of Sweden.
 
 ## Features
 
@@ -14,7 +14,7 @@ The `Triangulation.cs` class features a partial implementation of the original [
 
 ### PolyExtruder.cs
 
-The `PolyExtruder.cs` class is responsible for handling the input data and creating all Unity3D GameObjects (incl. the actual mesh; 2D polygon / 3D prism) using the features provided through `Triangulation.cs` class in the process. Created 3D prisms (extruded 2D polygons) consist of three GameObjects, namely 1) the bottom mesh (y = 0), 2) the top mesh (y = dynamically assigned; greater than 0), and 3) the surrounding mesh connecting 1 and 2 on their outline accordingly.
+The `PolyExtruder.cs` class is responsible for handling the input data and creating all Unity GameObjects (incl. the actual mesh; 2D polygon / 3D prism) using the features provided through `Triangulation.cs` class in the process. Created 3D prisms (extruded 2D polygons) consist of three GameObjects, namely 1) the bottom mesh (y = 0), 2) the top mesh (y = dynamically assigned; greater than 0), and 3) the surrounding mesh connecting 1 and 2 on their outline accordingly.
 
 Furthermore, the `PolyExtruder.cs` class provides some *quality-of-life* features, such as:
 
@@ -30,8 +30,8 @@ The main idea is to visualize the 2D input data along the x- and z-dimensions, w
 
 This project has been built using the following specifications:
 
-* OS X 10.14.6
-* [Unity3D](https://unity3d.com) 2019.2.17f1 Personal (OS X release)
+* Apple macOS Ventura 13.1
+* [Unity](https://unity.com) 2021.3.16f1 Personal (Apple Silicon, LTS)
 
 *Note:* Generally, Unity source code should work also within their Windows counterparts. Please check out the above stated dependencies for troubleshooting.
 
@@ -48,9 +48,9 @@ Additional resources used to create this project have been accessed as follows:
 
 ## How to use
 
-#### Import assets to Unity3D project
+#### Import assets to Unity project
 
-In order to add the features provided by this project to your Unity3D project, I recommend to add the assets by simply importing the pre-compiled `nicoversity-unity_polyextruder.unitypackage`. Alternatively, the repository directory `unity_src` features a directory titled `UnityPolyExtruder`, which contains an already setup Unity3D project (that was used to export the provided `.unitypackage` in the first place).
+In order to add the features provided by this project to your Unity project, I recommend to add the assets by simply importing the pre-compiled `nicoversity-unity_polyextruder.unitypackage`. Alternatively, the repository directory `unity_src` features a directory titled `Assets/nicoversity/polyextrude`, which contains all files that should be manually added to the respective `Assets` directory of an existing Unity project.
 
 #### PolyExtruder.cs class
 
@@ -90,14 +90,14 @@ Vector2 centroid = polyExtruder.polygonCentroid;
 
 #### Further documentation
 
-All Unity3D scripts in this project are well documented directly within the source code. Please refer directly to the individual scripts to get a better understanding of the implementation.
+All Unity scripts in this project are well documented directly within the source code. Please refer directly to the individual scripts to get a better understanding of the implementation.
 
 ### Examples
 
-The imported Unity3D assets provide two demonstration scenes:
+The imported Unity assets provide two demonstration scenes:
 
 - `TriangleNET_Test.unity`, illustrating and testing the implementation of the `Triangulation.cs` class via `TriangulationTest.cs` script.
-- `PolyExtruder_Demo.unity`, illustrating the usage of the `PolyExtruder.cs` class via `PolyExtruderDemo.cs` script. The `PolyExtruderDemo.cs` script allows the user to make selections using the Unity3D Inspector accordingly to a) select an example data set for the custom mesh creation (Triangle, Square, Cross, SCB Kommun RT90 Gotland), b) indicate whether the custom mesh should be created in 2D (polygon) or 3D (prism), c) the length ("height") of the extrusion, and d) whether the extrusion length should be dynamically scaled at runtime (oscillated movement example). 
+- `PolyExtruder_Demo.unity`, illustrating the usage of the `PolyExtruder.cs` class via `PolyExtruderDemo.cs` script. The `PolyExtruderDemo.cs` script allows the user to make selections using the Unity Inspector accordingly to a) select an example data set for the custom mesh creation (Triangle, Square, Cross, SCB Kommun RT90 Gotland), b) indicate whether the custom mesh should be created in 2D (polygon) or 3D (prism), c) the length ("height") of the extrusion, and d) whether the extrusion length should be dynamically scaled at runtime (oscillated movement example). 
 
 Please refer to these scenes and scripts to learn more about the examples.
 
@@ -150,10 +150,16 @@ A random extrusion length ("height") for each municipality has been applied to e
 1. No holes-support for extrusion (3D prism) is implemented. Although the `Triangulation.cs` script supports holes in the 2D polygon mesh, the support for holes as part of the `PolyExtruder.cs` class *has not* been implemented in this version.
 
 ## Changelog
+
+### 2023-01-06
+
+* Modified the mesh creation algorithm to use for each vertex the difference between original input vertex and calculated polygon centroid (instead of simply using the original input vertices). This way, the anchor of the generated mesh is correctly located at the coordinate system's origin (0,0), in turn enabling appropriate mesh manipulation at runtime (e.g., via Scale property in the GameObject's Transform).
+* Unity version upgrade to support 2021.3.16f1 (from prior version 2019.2.17f1; no changes in code required).
+
 ### 2021-02-17
 
-* added feature to allow display of the polygon's outline
-* upgrade to support Unity version 2019.2.17f1 Personal (from prior version 2019.1.5f1; no changes in the code required)
+* Added feature to allow display of the polygon's outline.
+* Upgrade to support Unity version 2019.2.17f1 Personal (from prior version 2019.1.5f1; no changes in the code required).
 
 ## License
 MIT License, see [LICENSE.md](LICENSE.md)
