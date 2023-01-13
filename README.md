@@ -65,6 +65,8 @@ Vector2[] MyCustomMeshData = new Vector2[]
 };
 float extrusionHeight = 10.0f;
 bool is3D = true;
+bool isUsingBottomMeshIn3D = true;
+bool isUsingColliders = true;
 
 // create new GameObject (as a child), and further configuration
 GameObject polyExtruderGO = new GameObject();
@@ -81,7 +83,7 @@ polyExtruder.outlineWidth = 0.1f;         // default: 0.01f
 polyExtruder.outlineColor = Color.blue;   // default: Color.black
 
 // run poly extruder according to input data
-polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MyCustomMeshData, Color.grey, is3D);
+polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MyCustomMeshData, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingColliders);
 
 // access calculated area and centroid
 float area = polyExtruder.polygonArea;
@@ -150,6 +152,12 @@ A random extrusion length ("height") for each municipality has been applied to e
 1. No holes-support for extrusion (3D prism) is implemented. Although the `Triangulation.cs` script supports holes in the 2D polygon mesh, the support for holes as part of the `PolyExtruder.cs` class *has not* been implemented in this version.
 
 ## Changelog
+
+### 2023-01-13
+
+* Modified calculateAreaAndCentroid() function to internally utilize double (instead of float) type for area and centroid calculations.
+* Added feature to conveniently indicate whether or not the bottom mesh component should be attached (only in Prism 3D, i.e., is3D = true).
+* Added feature to conveniently indicate whether or not MeshCollider components should be attached.
 
 ### 2023-01-06
 

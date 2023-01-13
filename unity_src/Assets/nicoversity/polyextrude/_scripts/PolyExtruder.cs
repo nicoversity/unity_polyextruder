@@ -22,6 +22,10 @@
  * 
  * 
  * === VERSION HISTORY | FEATURE CHANGE LOG ===
+ * 2023-01-13:
+ * - Modified calculateAreaAndCentroid() function to internally utilize double (instead of float) type for area and centroid calculations.
+ * - Added feature to conveniently indicate whether or not the bottom mesh component should be attached (only in Prism 3D, i.e., is3D = true).
+ * - Added feature to conveniently indicate whether or not MeshCollider components should be attached.
  * 2023-01-06:
  * - Modified the mesh creation algorithm to use for each vertex the difference between original input vertex and calculated polygon centroid
      (instead of simply using the original input vertices). This way, the anchor of the generated mesh is correctly located at the coordinate
@@ -39,7 +43,6 @@
  * Web: https://reski.nicoversity.com
  * Twitter: @nicoversity
  * GitHub: https://github.com/nicoversity
- * 
  * 
  */
 
@@ -70,6 +73,12 @@ public class PolyExtruder : MonoBehaviour
 
     // indicator if GameObject is extruded 3D (prism) or 2D (polygon)
     private bool is3D;
+
+    // indicator whether or not the bottom mesh component should be attached (only relevant if is3D == true)
+    private bool isUsingBottomMeshIn3D;
+
+    // indicator whether or not to attach MeshCollider components
+    private bool isUsingColliders;
 
     // reference to extrusion height (Y axis)
     // Note: default y (height) of extruded polygon = 1.0f; default y (height) of bottom polygon = 0.0f;
@@ -102,7 +111,9 @@ public class PolyExtruder : MonoBehaviour
     /// <param name="vertices">Vector2 Array representing the input data of the polygon.</param>
     /// <param name="color">Color of the prism's material.</param>
     /// <param name="is3D">Set to<c>true</c> if polygon extrusion should be applied (= 3D prism), or <c>false</c> if it is only the (2D) polygon.</param>
-    public void createPrism(string prismName, float height, Vector2[] vertices, Color32 color, bool is3D)
+    /// <param name="isUsingBottomMeshIn3D">Set to<c>true</c> if the bottom mesh component should be attached, or <c>false</c> if not.</param>
+    /// <param name="isUsingColliders">Set to<c>true</c> if MeshCollider components should be attached, or <c>false</c> if not.</param>
+    public void createPrism(string prismName, float height, Vector2[] vertices, Color32 color, bool is3D, bool isUsingBottomMeshIn3D, bool isUsingColliders)
     {
         // set data
         this.prismName = name;
@@ -112,6 +123,8 @@ public class PolyExtruder : MonoBehaviour
         this.polygonArea = 0.0f;
         this.polygonCentroid = new Vector2(0.0f, 0.0f);
         this.is3D = is3D;
+        this.isUsingBottomMeshIn3D = isUsingBottomMeshIn3D;
+        this.isUsingColliders = isUsingColliders;
 
         // handle vertex order
         bool vertexOrderClockwise = areVerticesOrderedClockwise(this.originalPolygonVertices);
@@ -166,8 +179,9 @@ public class PolyExtruder : MonoBehaviour
         // implementation adapted via http://paulbourke.net/geometry/polygonmesh/
 
         // setup temporary variables for calculation
-        float doubleArea = 0.0f;
-        Vector2 centroid = new Vector2(0.0f, 0.0f);
+        double doubleArea = 0.0;
+        double centroidX = 0.0;
+        double centroidY = 0.0;
 
         // iterate through all vertices
         for (int i = 0; i < vertices.Length; i++)
@@ -176,24 +190,25 @@ public class PolyExtruder : MonoBehaviour
             if (i + 1 == vertices.Length)
             {
                 doubleArea = doubleArea + (vertices[i].x * vertices[0].y - vertices[0].x * vertices[i].y);
-                centroid.x = centroid.x + ((vertices[i].x + vertices[0].x) * (vertices[i].x * vertices[0].y - vertices[0].x * vertices[i].y));
-                centroid.y = centroid.y + ((vertices[i].y + vertices[0].y) * (vertices[i].x * vertices[0].y - vertices[0].x * vertices[i].y));
+                centroidX = centroidX + ((vertices[i].x + vertices[0].x) * (vertices[i].x * vertices[0].y - vertices[0].x * vertices[i].y));
+                centroidY = centroidY + ((vertices[i].y + vertices[0].y) * (vertices[i].x * vertices[0].y - vertices[0].x * vertices[i].y));
             }
             // handle normal case
             else
             {
                 doubleArea = doubleArea + (vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y);
-                centroid.x = centroid.x + ((vertices[i].x + vertices[i + 1].x) * (vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y));
-                centroid.y = centroid.y + ((vertices[i].y + vertices[i + 1].y) * (vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y));
+                centroidX = centroidX + ((vertices[i].x + vertices[i + 1].x) * (vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y));
+                centroidY = centroidY + ((vertices[i].y + vertices[i + 1].y) * (vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y));
             }
         }
 
         // set area
-        this.polygonArea = (doubleArea < 0) ? doubleArea * -0.5f : doubleArea * 0.5f;
+        double polygonArea = (doubleArea < 0) ? doubleArea * -0.5 : doubleArea * 0.5;
+        this.polygonArea = (float)polygonArea;
 
         // set centroid
-        float sixTimesArea = doubleArea * 3.0f;
-        this.polygonCentroid = new Vector2(centroid.x / sixTimesArea, centroid.y / sixTimesArea);
+        double sixTimesArea = doubleArea * 3.0;
+        this.polygonCentroid = new Vector2((float)(centroidX / sixTimesArea), (float)(centroidY / sixTimesArea));
 
         // return statement (indicating that area and centroid have been set)
         return true;
@@ -221,7 +236,7 @@ public class PolyExtruder : MonoBehaviour
         goB.transform.parent = this.transform;
         goB.name = "bottom_" + this.prismName;
         MeshFilter mfB = goB.AddComponent<MeshFilter>();
-        goB.AddComponent<MeshCollider>();
+        if(this.isUsingColliders) goB.AddComponent<MeshCollider>();
         bottomMeshRenderer = goB.AddComponent<MeshRenderer>();
         bottomMeshRenderer.material = new Material(Shader.Find("Diffuse"));
 
@@ -251,7 +266,7 @@ public class PolyExtruder : MonoBehaviour
         redrawMesh(this.bottomMesh, verticesB, indicesB);
 
         // reset mesh collider after (re-)creation
-        goB.GetComponent<MeshCollider>().sharedMesh = this.bottomMesh;
+        if(this.isUsingColliders) goB.GetComponent<MeshCollider>().sharedMesh = this.bottomMesh;
 
         /*
         // generate a simple UVmap
@@ -276,6 +291,11 @@ public class PolyExtruder : MonoBehaviour
         //
         if(this.is3D)
         {
+            // if the bottom mesh component should not be attached in 3D (prism),
+            // simply destroy the GameObject
+            if (this.isUsingBottomMeshIn3D == false) GameObject.Destroy(goB);
+
+
 			// 2. TOP MESH
 			//
 			
@@ -284,7 +304,7 @@ public class PolyExtruder : MonoBehaviour
 			goT.transform.parent = this.transform;
 			goT.name = "top_" + this.prismName;
 			MeshFilter mfT = goT.AddComponent<MeshFilter>();
-			goT.AddComponent<MeshCollider>();
+			if(this.isUsingColliders) goT.AddComponent<MeshCollider>();
 			topMeshRenderer = goT.AddComponent<MeshRenderer>();
 			topMeshRenderer.material = new Material(Shader.Find("Diffuse"));
 			
@@ -312,9 +332,9 @@ public class PolyExtruder : MonoBehaviour
 						
 			// assign indices and vertices and create mesh
 			redrawMesh(this.topMesh, verticesT, indicesT);
-			
-			// reset mesh collider after (re-)creation
-			goT.GetComponent<MeshCollider>().sharedMesh = this.topMesh;
+
+            // reset mesh collider after (re-)creation
+            if(this.isUsingColliders) goT.GetComponent<MeshCollider>().sharedMesh = this.topMesh;
 			
 			/*
             // generate a simple UV map
@@ -336,7 +356,6 @@ public class PolyExtruder : MonoBehaviour
 			goS.transform.parent = this.transform;
 			goS.name = "surround_" + this.prismName;
 			MeshFilter mfS = goS.AddComponent<MeshFilter>();
-			goS.AddComponent<MeshCollider>();
 			surroundMeshRenderer = goS.AddComponent<MeshRenderer>();
 			surroundMeshRenderer.material = new Material(Shader.Find("Diffuse"));
 			
@@ -407,7 +426,9 @@ public class PolyExtruder : MonoBehaviour
             /*
             // reset mesh collider after (re-)creation (not needed right now since no mesh collider is attached)
 			goS.GetComponent<MeshCollider>().sharedMesh = this.surroundMesh;
-			
+            */
+
+            /*
 			// generate a simple UV map
 			Vector2[] uvsS = new Vector2[this.surroundMesh.vertices.Length];
 			for (int i = 0; i < uvsS.Length; i++)
@@ -418,9 +439,11 @@ public class PolyExtruder : MonoBehaviour
 			*/
 
             // note: for 3D prism, only keep top mesh collider activated (adapt to own preferences this if needed)
-            goB.GetComponent<MeshCollider>().enabled = false;
-            goT.GetComponent<MeshCollider>().enabled = true;
-            goS.GetComponent<MeshCollider>().enabled = false;
+            if(this.isUsingColliders)
+            {
+                goB.GetComponent<MeshCollider>().enabled = false;
+                goT.GetComponent<MeshCollider>().enabled = true;
+            }
         }
 
         // set height and color

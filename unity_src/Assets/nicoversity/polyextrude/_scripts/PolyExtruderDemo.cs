@@ -28,6 +28,8 @@ public class PolyExtruderDemo : MonoBehaviour
     // set up options (adjusted via Unity Inspector)
     public bool isOutlineRendered = false;
     public bool is3D = false;
+    public bool isUsingBottomMeshIn3D = true;
+    public bool isUsingCollider = false;
     public bool enableMovement = false;
     public float extrusionHeight = 10.0f;
 
@@ -51,20 +53,20 @@ public class PolyExtruderDemo : MonoBehaviour
         {
             case ExampleData.Triangle:
                 polyExtruderGO.name = "Triangle";
-                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataTriangle, Color.grey, is3D);
+                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataTriangle, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingCollider);
                 break;
             case ExampleData.Square:
                 polyExtruderGO.name = "Square";
-                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataSquare, Color.grey, is3D);
+                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataSquare, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingCollider);
                 break;
             case ExampleData.Cross:
                 polyExtruderGO.name = "Cross";
-                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataCross, Color.grey, is3D);
+                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataCross, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingCollider);
                 break;
             default:
             case ExampleData.SCB_Gotland:
                 polyExtruderGO.name = "SCB_Kommun_RT90_Gotland";
-                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataGotland, Color.grey, is3D);
+                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataGotland, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingCollider);
                 break;
         }
     }
