@@ -189,16 +189,16 @@ public class PolyExtruder : MonoBehaviour
             // handle last case
             if (i + 1 == vertices.Length)
             {
-                doubleArea = doubleArea + (vertices[i].x * vertices[0].y - vertices[0].x * vertices[i].y);
-                centroidX = centroidX + ((vertices[i].x + vertices[0].x) * (vertices[i].x * vertices[0].y - vertices[0].x * vertices[i].y));
-                centroidY = centroidY + ((vertices[i].y + vertices[0].y) * (vertices[i].x * vertices[0].y - vertices[0].x * vertices[i].y));
+                doubleArea = doubleArea + ((double)vertices[i].x * (double)vertices[0].y - (double)vertices[0].x * (double)vertices[i].y);
+                centroidX = centroidX + (((double)vertices[i].x + (double)vertices[0].x) * ((double)vertices[i].x * (double)vertices[0].y - (double)vertices[0].x * (double)vertices[i].y));
+                centroidY = centroidY + (((double)vertices[i].y + (double)vertices[0].y) * ((double)vertices[i].x * (double)vertices[0].y - (double)vertices[0].x * (double)vertices[i].y));
             }
             // handle normal case
             else
             {
-                doubleArea = doubleArea + (vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y);
-                centroidX = centroidX + ((vertices[i].x + vertices[i + 1].x) * (vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y));
-                centroidY = centroidY + ((vertices[i].y + vertices[i + 1].y) * (vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y));
+                doubleArea = doubleArea + ((double)vertices[i].x * (double)vertices[i + 1].y - (double)vertices[i + 1].x * (double)vertices[i].y);
+                centroidX = centroidX + (((double)vertices[i].x + (double)vertices[i + 1].x) * ((double)vertices[i].x * (double)vertices[i + 1].y - (double)vertices[i + 1].x * (double)vertices[i].y));
+                centroidY = centroidY + (((double)vertices[i].y + (double)vertices[i + 1].y) * ((double)vertices[i].x * (double)vertices[i + 1].y - (double)vertices[i + 1].x * (double)vertices[i].y));
             }
         }
 
