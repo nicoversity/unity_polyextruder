@@ -22,6 +22,9 @@
  * 
  * 
  * === VERSION HISTORY | FEATURE CHANGE LOG ===
+ * 2023-01-15:
+ * - Minor bug fix: Appropriate type casting (double) of Vector2 values in calculateAreaAndCentroid() function.
+ * - Modified the default material to utilize Unity's "Standard" shader instead of the legacy "Diffuse" shader.
  * 2023-01-13:
  * - Modified calculateAreaAndCentroid() function to internally utilize double (instead of float) type for area and centroid calculations.
  * - Added feature to conveniently indicate whether or not the bottom mesh component should be attached (only in Prism 3D, i.e., is3D = true).
@@ -238,7 +241,7 @@ public class PolyExtruder : MonoBehaviour
         MeshFilter mfB = goB.AddComponent<MeshFilter>();
         if(this.isUsingColliders) goB.AddComponent<MeshCollider>();
         bottomMeshRenderer = goB.AddComponent<MeshRenderer>();
-        bottomMeshRenderer.material = new Material(Shader.Find("Diffuse"));
+        bottomMeshRenderer.material = new Material(Shader.Find("Standard"));
 
         // keep reference to bottom mesh
         this.bottomMesh = mfB.mesh;
@@ -306,7 +309,7 @@ public class PolyExtruder : MonoBehaviour
 			MeshFilter mfT = goT.AddComponent<MeshFilter>();
 			if(this.isUsingColliders) goT.AddComponent<MeshCollider>();
 			topMeshRenderer = goT.AddComponent<MeshRenderer>();
-			topMeshRenderer.material = new Material(Shader.Find("Diffuse"));
+			topMeshRenderer.material = new Material(Shader.Find("Standard"));
 			
 			// keep reference to top mesh
 			this.topMesh = mfT.mesh;
@@ -357,7 +360,7 @@ public class PolyExtruder : MonoBehaviour
 			goS.name = "surround_" + this.prismName;
 			MeshFilter mfS = goS.AddComponent<MeshFilter>();
 			surroundMeshRenderer = goS.AddComponent<MeshRenderer>();
-			surroundMeshRenderer.material = new Material(Shader.Find("Diffuse"));
+			surroundMeshRenderer.material = new Material(Shader.Find("Standard"));
 			
 			// keep reference to surrounding mesh
 			this.surroundMesh = mfS.mesh;

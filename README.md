@@ -153,15 +153,19 @@ A random extrusion length ("height") for each municipality has been applied to e
 
 ## Changelog
 
+### 2023-01-15
+ * Minor bug fix: Appropriate type casting (`double`) of `Vector2` values in `calculateAreaAndCentroid()` function.
+ * Modified the default material to utilize Unity's `Standard` shader instead of the legacy `Diffuse` shader.
+
 ### 2023-01-13
 
-* Modified calculateAreaAndCentroid() function to internally utilize double (instead of float) type for area and centroid calculations.
-* Added feature to conveniently indicate whether or not the bottom mesh component should be attached (only in Prism 3D, i.e., is3D = true).
-* Added feature to conveniently indicate whether or not MeshCollider components should be attached.
+* Modified `calculateAreaAndCentroid()` function to internally utilize `double` (instead of `float`) type for area and centroid calculations.
+* Added feature to conveniently indicate whether or not the bottom mesh component should be attached (only in Prism 3D, i.e., `is3D = true`).
+* Added feature to conveniently indicate whether or not `MeshCollider` components should be attached.
 
 ### 2023-01-06
 
-* Modified the mesh creation algorithm to use for each vertex the difference between original input vertex and calculated polygon centroid (instead of simply using the original input vertices). This way, the anchor of the generated mesh is correctly located at the coordinate system's origin (0,0), in turn enabling appropriate mesh manipulation at runtime (e.g., via Scale property in the GameObject's Transform).
+* Modified the mesh creation algorithm to use for each vertex the difference between original input vertex and calculated polygon centroid (instead of simply using the original input vertices). This way, the anchor of the generated mesh is correctly located at the coordinate system's origin (0,0), in turn enabling appropriate mesh manipulation at runtime (e.g., via `Scale` property in the `GameObject's Transform`).
 * Unity version upgrade to support 2021.3.16f1 (from prior version 2019.2.17f1; no changes in code required).
 
 ### 2021-02-17
