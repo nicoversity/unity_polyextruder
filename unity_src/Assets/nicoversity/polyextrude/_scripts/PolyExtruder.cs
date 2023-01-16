@@ -22,6 +22,9 @@
  * 
  * 
  * === VERSION HISTORY | FEATURE CHANGE LOG ===
+ * 2023-01-16:
+ * - Minor bug fix: The updateColor() function in the PolyExtruder class considers now appropriately the coloring of the bottom mesh component
+ *   depending on whether or not it exists in the 3D prism condition.
  * 2023-01-15:
  * - Minor bug fix: Appropriate type casting (double) of Vector2 values in calculateAreaAndCentroid() function.
  * - Modified the default material to utilize Unity's "Standard" shader instead of the legacy "Diffuse" shader.
@@ -508,9 +511,13 @@ public class PolyExtruder : MonoBehaviour
         if (!this.prismColor.Equals(color)) this.prismColor = color;
 
         // update color on meshes
-        bottomMeshRenderer.material.color = this.prismColor;
-        if (this.is3D)
+        if(!this.is3D)
         {
+            bottomMeshRenderer.material.color = this.prismColor;
+        }
+        else
+        {
+            if(this.isUsingBottomMeshIn3D) bottomMeshRenderer.material.color = this.prismColor;
             topMeshRenderer.material.color = this.prismColor;
             surroundMeshRenderer.material.color = this.prismColor;
         }

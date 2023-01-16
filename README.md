@@ -153,7 +153,12 @@ A random extrusion length ("height") for each municipality has been applied to e
 
 ## Changelog
 
+### 2023-01-16
+
+ * Minor bug fix: The `updateColor()` function in the `PolyExtruder` class considers now appropriately the coloring of the bottom mesh component depending on whether or not it exists in the 3D prism condition.
+
 ### 2023-01-15
+
  * Minor bug fix: Appropriate type casting (`double`) of `Vector2` values in `calculateAreaAndCentroid()` function.
  * Modified the default material to utilize Unity's `Standard` shader instead of the legacy `Diffuse` shader.
 
