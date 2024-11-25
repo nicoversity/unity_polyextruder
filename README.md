@@ -166,7 +166,7 @@ A random extrusion length ("height") for each municipality has been applied to e
 
 ### 2024-11-25
 
-* Added an alternative implementation of a more lighweight implementation of the `PolyExtruder.` class, titled `PolyExtruderLight.`. `PolyExtruderLight` generates one combined mesh (3D prism only) instead of keeping three separate top, bottom, and surround meshes.
+* Added an alternative, more lighweight implementation of the `PolyExtruder` class, titled `PolyExtruderLight`. `PolyExtruderLight` generates one combined mesh (3D prism only) instead of keeping three separate top, bottom, and surround meshes.
 
 ### 2023-01-16
 
