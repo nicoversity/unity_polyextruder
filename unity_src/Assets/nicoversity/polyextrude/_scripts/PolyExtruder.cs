@@ -22,6 +22,9 @@
  * 
  * 
  * === VERSION HISTORY | FEATURE CHANGE LOG ===
+ * 2024-11-25:
+ * - Added an alternative implementation of a more lighweight implementation of the PolyExtruder class, titled PolyExtruderLight.
+     PolyExtruderLight generates one combined mesh (3D prism only) instead of keeping three separate top, bottom, and surround meshes.
  * 2023-01-16:
  * - Minor bug fix: The updateColor() function in the PolyExtruder class considers now appropriately the coloring of the bottom mesh component
  *   depending on whether or not it exists in the 3D prism condition.
@@ -43,11 +46,10 @@
  * ============================================
  * 
  * 
- * Supported Unity version: 2021.3.16f1 Personal (tested)
+ * Supported Unity version: 2022.3.20f1 Personal (tested)
  * 
+ * Version: 2024.11
  * Author: Nico Reski
- * Web: https://reski.nicoversity.com
- * Twitter: @nicoversity
  * GitHub: https://github.com/nicoversity
  * 
  */
@@ -95,6 +97,7 @@ public class PolyExtruder : MonoBehaviour
 
     // reference to original input vertices of Polygon in Vector2 Array format
     private Vector2[] originalPolygonVertices;
+    public Vector2[] OriginalPolygonVertices { get { return originalPolygonVertices; } }
 
     // references to prism (polygon -> 2D; prism -> 3D) components
     private Mesh bottomMesh;
@@ -216,8 +219,11 @@ public class PolyExtruder : MonoBehaviour
         double sixTimesArea = doubleArea * 3.0;
         this.polygonCentroid = new Vector2((float)(centroidX / sixTimesArea), (float)(centroidY / sixTimesArea));
 
-        // return statement (indicating that area and centroid have been set)
-        return true;
+        // return statement, indicating whether or not area and centroid could be successfully calculated, i.e.,
+        // false if calculated area is (near) 0, or
+        // true if calculated area is > 0
+        if (Mathf.Approximately(0.0f, this.polygonArea)) return false;
+        else return true;
     }
 
     /// <summary>

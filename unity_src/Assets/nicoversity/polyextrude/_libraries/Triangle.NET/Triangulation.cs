@@ -7,11 +7,10 @@
  * Triangle.NET library implementation (by Christian Woltering): https://archive.codeplex.com/?p=triangle
  * (Original) Triangle library implementation (by Jonathan Richard Shewchuk): http://www.cs.cmu.edu/~quake/triangle.html
  * 
- * Supported Unity version: 2021.3.16f1 Personal (tested)
- *
+ * Supported Unity version: 2022.3.20f1 Personal (tested)
+ * 
+ * Version: 2024.11
  * Author: Nico Reski
- * Web: https://reski.nicoversity.com
- * Twitter: @nicoversity
  * GitHub: https://github.com/nicoversity
  * 
  */

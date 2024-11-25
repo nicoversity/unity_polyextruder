@@ -1,7 +1,7 @@
-﻿/*
- * PolyExtruderDemo.cs
+/*
+ * PolyExtruderLightDemo.cs
  *
- * Description: Class to demonstrate the application and functionalities of the PolyExtruder.cs script.
+ * Description: Class to demonstrate the application and functionalities of the PolyExtruderLight.cs script.
  * 
  * Supported Unity version: 2022.3.20f1 Personal (tested)
  * 
@@ -14,24 +14,20 @@
 using UnityEngine;
 
 /// <summary>
-/// Class to demonstrate the PolyExtruder class' functionalities.
+/// Class to demonstrate the PolyExtruderLight class' functionalities.
 /// </summary>
-public class PolyExtruderDemo : MonoBehaviour
+public class PolyExtruderLightDemo : MonoBehaviour
 {
     // enum for selecting example data (to be selected via Unity Inspector)
     public enum ExampleData { Triangle, Square, Cross, SCB_Gotland };
     public ExampleData exampleData;
 
     // set up options (adjusted via Unity Inspector)
-    public bool isOutlineRendered = false;
-    public bool is3D = false;
-    public bool isUsingBottomMeshIn3D = true;
-    public bool isUsingCollider = false;
     public bool enableMovement = false;
     public float extrusionHeight = 10.0f;
 
     // reference to setup example poly extruder 
-    private PolyExtruder polyExtruder;
+    private PolyExtruderLight polyExtruderLight;
 
     void Start()
     {
@@ -40,30 +36,27 @@ public class PolyExtruderDemo : MonoBehaviour
         polyExtruderGO.transform.parent = this.transform;
 
         // add PolyExtruder script to newly created GameObject and keep track of its reference
-        polyExtruder = polyExtruderGO.AddComponent<PolyExtruder>();
-
-        // global PolyExtruder configurations
-        polyExtruder.isOutlineRendered = isOutlineRendered;
+        polyExtruderLight = polyExtruderGO.AddComponent<PolyExtruderLight>();
 
         // run poly extruder according to selected example data
         switch (exampleData)
         {
             case ExampleData.Triangle:
                 polyExtruderGO.name = "Triangle";
-                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataTriangle, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingCollider);
+                polyExtruderLight.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataTriangle, Color.grey);
                 break;
             case ExampleData.Square:
                 polyExtruderGO.name = "Square";
-                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataSquare, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingCollider);
+                polyExtruderLight.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataSquare, Color.grey);
                 break;
             case ExampleData.Cross:
                 polyExtruderGO.name = "Cross";
-                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataCross, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingCollider);
+                polyExtruderLight.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataCross, Color.grey);
                 break;
             default:
             case ExampleData.SCB_Gotland:
                 polyExtruderGO.name = "SCB_Kommun_RT90_Gotland";
-                polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataGotland, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingCollider);
+                polyExtruderLight.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataGotland, Color.grey);
                 break;
         }
     }
@@ -73,7 +66,7 @@ public class PolyExtruderDemo : MonoBehaviour
         // if movement is selected (via Unity Inspector), oscillate height accordingly
         if(enableMovement)
         {
-            polyExtruder.updateHeight((Mathf.Sin(Time.time) + 1.0f) * this.extrusionHeight);
+            polyExtruderLight.updateHeight((Mathf.Sin(Time.time) + 1.0f) * this.extrusionHeight);
         }
     }
 

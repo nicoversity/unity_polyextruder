@@ -5,11 +5,10 @@
  * The class creates a mesh representing a cross with a square hole inside (coordinates are hard-coded; see implementation).
  * The source of this class has been adapted from the video setup tutorial at https://www.youtube.com/watch?v=wByVhzokWPo (note: unfortunately, the video is no longer available as of 2019-06-04).
  *
- * Supported Unity version: 2021.3.16f1 Personal (tested)
- *
+ * Supported Unity version: 2022.3.20f1 Personal (tested)
+ * 
+ * Version: 2024.11
  * Author: Nico Reski
- * Web: https://reski.nicoversity.com
- * Twitter: @nicoversity
  * GitHub: https://github.com/nicoversity
  * 
  */

@@ -26,12 +26,16 @@ Furthermore, the `PolyExtruder.cs` class provides some *quality-of-life* feature
 
 The main idea is to visualize the 2D input data along the x- and z-dimensions, while the (potential) extrusion is always conducted along the y-dimension. 
 
+### PolyExtruderLight.cs
+
+The `PolyExtruderLight.cs` class is an alternative, lightweight implementation of the original `PolyExtruder.cs` class. Instead of keeping three separate meshes (top, bottom, surround) at runtime, it combines these into one mesh that can be more resource-friendly, particularly when working with many meshes / GameObjects. Please inspect the documentation inside the `PolyExtruderLight.cs` script for additional information and remarks. Please note that the `PolyExtruderLight.cs` class is always setting up the GameObject as an extruded 3D prism.
+
 ## Dependencies
 
 This project has been built using the following specifications:
 
-* Apple macOS Ventura 13.1
-* [Unity](https://unity.com) 2021.3.16f1 Personal (Apple Silicon, LTS)
+* Apple macOS Sonoma 14.7
+* [Unity](https://unity.com) 2022.3.20f1 Personal (Apple Silicon, LTS)
 
 *Note:* Generally, Unity source code should work also within their Windows counterparts. Please check out the above stated dependencies for troubleshooting.
 
@@ -96,16 +100,17 @@ All Unity scripts in this project are well documented directly within the source
 
 ### Examples
 
-The imported Unity assets provide two demonstration scenes:
+The imported Unity assets provide three demonstration scenes:
 
 - `TriangleNET_Test.unity`, illustrating and testing the implementation of the `Triangulation.cs` class via `TriangulationTest.cs` script.
 - `PolyExtruder_Demo.unity`, illustrating the usage of the `PolyExtruder.cs` class via `PolyExtruderDemo.cs` script. The `PolyExtruderDemo.cs` script allows the user to make selections using the Unity Inspector accordingly to a) select an example data set for the custom mesh creation (Triangle, Square, Cross, SCB Kommun RT90 Gotland), b) indicate whether the custom mesh should be created in 2D (polygon) or 3D (prism), c) the length ("height") of the extrusion, and d) whether the extrusion length should be dynamically scaled at runtime (oscillated movement example). 
+- `PolyExtruderLight_Demo.unity`, illustrating the usage of the `PolyExtruderLight.cs` class via `PolyExtruderLightDemo.cs` script, following the same examples as featured in the `PolyExtruderDemo.cs` script.
 
 Please refer to these scenes and scripts to learn more about the examples.
 
 ### Screenshots - Example Data
 
-Following, some visual impressions of the included example data, visualized using the `Triangulation.cs` and `PolyExtruder.cs` classes.
+Following, some visual impressions of the included example data, visualized using the `Triangulation.cs`, `PolyExtruder.cs`, and `PolyExtruderLight.cs` classes.
 
 #### Triangulation Test: Cross
 ![Triangulation Test: Cross](docs/test_triangulation_cross.png)
@@ -151,16 +156,26 @@ A random extrusion length ("height") for each municipality has been applied to e
 
 1. No holes-support for extrusion (3D prism) is implemented. Although the `Triangulation.cs` script supports holes in the 2D polygon mesh, the support for holes as part of the `PolyExtruder.cs` class *has not* been implemented in this version.
 
+#### PolyExtruderLight.cs
+
+1. No holes-support for extrusion (3D prism) is implemented. Although the `Triangulation.cs` script supports holes in the 2D polygon mesh, the support for holes as part of the `PolyExtruderLight.cs` class *has not* been implemented in this version.
+2. Compared to the `PolyExtruder.cs` class, the `Outline Renderer` feature is currently not implemented.
+3. Compared to the `PolyExtruder.cs` class, the `MeshCollider` component is currently not implemented.
+
 ## Changelog
+
+### 2024-11-25
+
+* Added an alternative implementation of a more lighweight implementation of the `PolyExtruder.` class, titled `PolyExtruderLight.`. `PolyExtruderLight` generates one combined mesh (3D prism only) instead of keeping three separate top, bottom, and surround meshes.
 
 ### 2023-01-16
 
- * Minor bug fix: The `updateColor()` function in the `PolyExtruder` class considers now appropriately the coloring of the bottom mesh component depending on whether or not it exists in the 3D prism condition.
+* Minor bug fix: The `updateColor()` function in the `PolyExtruder.cs` class considers now appropriately the coloring of the bottom mesh component depending on whether or not it exists in the 3D prism condition.
 
 ### 2023-01-15
 
- * Minor bug fix: Appropriate type casting (`double`) of `Vector2` values in `calculateAreaAndCentroid()` function.
- * Modified the default material to utilize Unity's `Standard` shader instead of the legacy `Diffuse` shader.
+* Minor bug fix: Appropriate type casting (`double`) of `Vector2` values in `calculateAreaAndCentroid()` function.
+* Modified the default material to utilize Unity's `Standard` shader instead of the legacy `Diffuse` shader.
 
 ### 2023-01-13
 
